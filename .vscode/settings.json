@@ -1,0 +1,34 @@
+{
+  // Formatting & Linting
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.alwaysShowStatus": true,
+  "eslint.format.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact"
+  ],
+
+  // TypeScript settings
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  // Editor config
+  "files.exclude": {
+    "node_modules": true,
+    "dist": true,
+    ".env": true
+  },
+  "files.watcherExclude": {
+    "/node_modules": true,
+    "/dist": true
+  },
+
+  // Vite dev server debug console
+  "console.experimental.useSplitConsole": true,
+
+  // Git settings
+  "git.autofetch": true
+}

@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint", // ESLint integration
+    "esbenp.prettier-vscode", // Prettier for formatting
+    "formulahendry.auto-close-tag", // Auto close tags in JSX
+    "formulahendry.auto-rename-tag", // Auto rename paired tags
+    "wix.vscode-import-cost", // Show import sizes
+    "jmrog.vscode-npm-script", // npm script support
+    "firebase.vscode-firestore-emulator", // Firestore emulator support
+    "firebase.vscode-firestore-security-rules", // Firestore rules
+  ]
+}
