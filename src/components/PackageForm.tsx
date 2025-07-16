@@ -75,7 +75,7 @@ export const PackageForm = () => {
         <input type="number" name="children" defaultValue={14} min={1} onChange={e => update('children', parseInt(e.target.value))} />
       </label>
       <fieldset>
-        <legend>Extras:</legend>
+        <legend>Extras:</legend> 
         {Object.keys(PRICES.extras).map(extra => (
           <label key={extra}>
             <input type="checkbox" name="extras" value={extra} onChange={() => toggleExtra(extra)} />
