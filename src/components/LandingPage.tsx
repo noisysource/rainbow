@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Calendar from './calendar';
+import Calendar from './Calendar';
 import BookingPanel from './BookingPanel';
 
 export default function LandingPage() {
