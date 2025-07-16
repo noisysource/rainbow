@@ -1,7 +1,6 @@
 import React from 'react';
 import { PackageForm } from './components/PackageForm';
 import LandingPage from './components/LandingPage';
-import './index.css'
 
 function App() {
   return (
