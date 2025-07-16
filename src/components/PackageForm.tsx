@@ -1,6 +1,6 @@
 // src/components/PackageForm.tsx
 import { useState, useEffect } from 'react';
-import type { BookingSlot } from './calendar';
+import type { BookingSlot } from './Calendar';
 
 const BASE_PRICE = 130;
 const EXTRAS = [
