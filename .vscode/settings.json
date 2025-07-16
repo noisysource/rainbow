@@ -18,8 +18,8 @@
   // Editor config
   "files.exclude": {
     "node_modules": true,
-    "dist": true,
-    ".env": true
+    "dist": false,
+    ".env": false
   },
   "files.watcherExclude": {
     "/node_modules": true,
