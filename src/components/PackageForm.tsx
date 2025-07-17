@@ -1,6 +1,8 @@
 // src/components/PackageForm.tsx
 import { useState, useEffect } from 'react';
 import type { BookingSlot } from './Calendar';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const BASE_PRICE = 130;
 const EXTRAS = [
@@ -29,11 +31,26 @@ export default function PackageForm({ slot }: { slot: BookingSlot }) {
     setSelectedExtras((prev) => ({ ...prev, [id]: qty }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert(`Reserva enviada para ${slot.date} às ${slot.time} com total de €${total.toFixed(2)}`);
-    // TODO: send to Firebase
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const bookingData = {
+    date: slot.date,
+    time: slot.time,
+    numKids,
+    extras: selectedExtras,
+    total,
+    createdAt: new Date(),
   };
+
+  try {
+    await addDoc(collection(db, 'bookings'), bookingData);
+    alert('Reserva enviada com sucesso!');
+  } catch (error) {
+    console.error('Erro ao enviar reserva:', error);
+    alert('Erro ao enviar reserva. Tente novamente.');
+  }
+};
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-6">

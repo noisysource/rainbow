@@ -1,5 +1,8 @@
-import { useState } from 'react';
+// src/components/Calendar.tsx
+import { useState, useEffect } from 'react';
 import { format, addDays, startOfToday, isSameDay } from 'date-fns';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const TIME_SLOTS = ['10:30', '14:00', '17:30'];
 
@@ -10,26 +13,39 @@ export type BookingSlot = {
 
 export default function Calendar({ onSelect }: { onSelect: (slot: BookingSlot) => void }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [bookedSlots, setBookedSlots] = useState<Record<string, string[]>>({});
+
   const today = startOfToday();
 
-  // Dummy data simulating 3-slot-per-day system
-  const availableSlots: Record<string, string[]> = {};
-  for (let i = 0; i < 30; i++) {
-    const date = format(addDays(today, i), 'yyyy-MM-dd');
-    availableSlots[date] = TIME_SLOTS; // in real case, fetch from Firebase
-  }
+  useEffect(() => {
+    const fetchBookings = async () => {
+      const snapshot = await getDocs(collection(db, 'bookings'));
+      const bookings: Record<string, string[]> = {};
+      snapshot.forEach((doc) => {
+        const { date, time } = doc.data();
+        if (!bookings[date]) bookings[date] = [];
+        bookings[date].push(time);
+      });
+      setBookedSlots(bookings);
+    };
+
+    fetchBookings();
+  }, []);
 
   const handleDateClick = (date: Date) => {
     setSelectedDate(date);
   };
 
   const handleSlotClick = (time: string) => {
-  if (selectedDate) {
-    const slot = { date: format(selectedDate, 'yyyy-MM-dd'), time };
-    console.log('Selected slot:', slot); // ✅ Add this line
-    onSelect(slot);
-  }
-};
+    if (selectedDate) {
+      onSelect({ date: format(selectedDate, 'yyyy-MM-dd'), time });
+    }
+  };
+
+  const getAvailableSlots = (dateStr: string) => {
+    const booked = bookedSlots[dateStr] || [];
+    return TIME_SLOTS.filter((slot) => !booked.includes(slot));
+  };
 
   return (
     <div className="max-w-xl mx-auto">
@@ -56,16 +72,25 @@ export default function Calendar({ onSelect }: { onSelect: (slot: BookingSlot) =
       {selectedDate && (
         <div className="mt-6 text-center">
           <h3 className="text-lg font-semibold mb-2">Escolha o horário</h3>
-          <div className="flex justify-center gap-4">
-            {(availableSlots[format(selectedDate, 'yyyy-MM-dd')] || []).map((time) => (
-              <button
-                key={time}
-                onClick={() => handleSlotClick(time)}
-                className="bg-pink-500 text-white py-2 px-4 rounded hover:bg-pink-600 transition"
-              >
-                {time}
-              </button>
-            ))}
+          <div className="flex flex-wrap justify-center gap-4">
+            {TIME_SLOTS.map((time) => {
+              const dateStr = format(selectedDate, 'yyyy-MM-dd');
+              const isBooked = bookedSlots[dateStr]?.includes(time);
+              return (
+                <button
+                  key={time}
+                  onClick={() => !isBooked && handleSlotClick(time)}
+                  disabled={isBooked}
+                  className={`py-2 px-4 rounded transition font-medium ${
+                    isBooked
+                      ? 'bg-red-300 text-white cursor-not-allowed'
+                      : 'bg-pink-500 text-white hover:bg-pink-600'
+                  }`}
+                >
+                  {time}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
