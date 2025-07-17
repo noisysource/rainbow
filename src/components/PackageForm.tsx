@@ -41,6 +41,7 @@ export default function PackageForm({ slot }: { slot: BookingSlot }) {
     extras: selectedExtras,
     total,
     createdAt: new Date(),
+    status: 'pending'
   };
 
   try {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { PackageForm } from './components/PackageForm';
 import LandingPage from './components/LandingPage';
 
 function App() {
